@@ -109,7 +109,9 @@ client.on("messageCreate", async (message) => {
 
     // Ignore unknown commands
     if (!command) {
-      return message.reply("Unknown command!");
+      return message.reply(
+        "Unknown command! Try `k!help` for a list of commands"
+      );
     }
 
     try {
