@@ -1,5 +1,5 @@
 // Load environment variables from .env file
-require('dotenv').config({ path: '../.env' });
+require("dotenv").config({ path: "../.env" });
 
 // Import required modules
 const fs = require("fs");
@@ -24,10 +24,13 @@ const { initializeVoiceConnection } = require("./utilities/voiceState");
 // Client variables
 client.commands = new Collection();
 client.events = new Collection();
+
+// Voice connection variables
 client.voiceConnections = new Map();
 client.voiceActivityIntervals = {};
-client.lolAccsCollection;
-client.voiceActivityCollection; 
+
+// MongoDB collections initialization - will be assigned when client is ready
+client.dbCollections = {};
 
 // Determine the directory paths for commands and events
 const commandsDir = path.join(__dirname, "commands");
@@ -61,8 +64,10 @@ client.once("ready", async () => {
   // Connect to MongoDB and its collections
   try {
     const db = await connectToMongo();
-    client.lolAccsCollection = db.collection("lolAccs");
-    client.voiceActivityCollection = db.collection("voiceActivity");
+    // Assign the collections to the client.dbCollections object
+    client.dbCollections.voiceActivityCollection =
+      db.collection("voiceActivity");
+    client.dbCollections.lolAccsCollection = db.collection("lolAccs");
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
@@ -90,7 +95,7 @@ client.on("messageCreate", async (message) => {
   // Check if the message starts with the command prefix
   if (message.content.startsWith(process.env.PREFIX)) {
     // Check if the MongoDB collection is available
-    if (!client.lolAccsCollection) {
+    if (!client.dbCollections.lolAccsCollection) {
       return message.reply("Error: MongoDB collection not available");
     }
 
@@ -102,8 +107,8 @@ client.on("messageCreate", async (message) => {
     const commandName = args.shift().toLowerCase();
     const command = client.commands.get(commandName);
 
-     // Ignore unknown commands
-    if (!command){
+    // Ignore unknown commands
+    if (!command) {
       return message.reply("Unknown command!");
     }
 

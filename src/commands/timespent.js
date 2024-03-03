@@ -4,7 +4,8 @@ const { msToTime } = require("../utilities/timeUtilities");
 module.exports = {
   name: "timespent",
   description: "Check the time spent in voice channels",
-  detailedDescription: "Use `k!timespent total` to check the total time spent in voice channels, or `k!timespent @user` to check the time spent by a specific user.",
+  detailedDescription:
+    "Use `k!timespent total` to check the total time spent in voice channels, or `k!timespent @user` to check the time spent by a specific user.",
   async execute(message, args, client) {
     let userId;
     let showTotal = false;
@@ -24,10 +25,14 @@ module.exports = {
 
     // Get the guild ID
     const guildId = message.guild.id;
-    console.log(`Fetching voice activity for user ${userId} in guild ${guildId}`);
+    console.log(
+      `Fetching voice activity for user ${userId} in guild ${guildId}`
+    );
 
     // Query the voice activity collection
-    const activity = await client.voiceActivityCollection.findOne({ userId, guildId });
+    const activity = await client.dbCollections.voiceActivityCollection.findOne(
+      { userId, guildId }
+    );
 
     if (activity) {
       const timeSpent = activity.timeSpent;
@@ -37,12 +42,18 @@ module.exports = {
 
       // Respond with the time spent in voice channels
       if (showTotal) {
-        message.reply(`<@${userId}> has wasted ${readableTotalTime} in total :skull:`);
+        message.reply(
+          `<@${userId}> has wasted ${readableTotalTime} in total :skull:`
+        );
       } else {
-        message.reply(`<@${userId}> has wasted ${readableTime} in this session :skull:`);
+        message.reply(
+          `<@${userId}> has wasted ${readableTime} in this session :skull:`
+        );
       }
     } else {
-      message.reply(`No voice activity recorded for <@${userId}> on this server.`);
+      message.reply(
+        `No voice activity recorded for <@${userId}> on this server.`
+      );
     }
   },
 };
