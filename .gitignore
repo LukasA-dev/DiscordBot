@@ -17,6 +17,3 @@ node_modules/
 
 # Ignore logs directory
 Logs/
-
-# Ignore versions directory
-versions/
