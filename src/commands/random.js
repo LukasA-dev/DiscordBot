@@ -16,6 +16,8 @@ Usage examples:
     // Check if arguments are provided for number range
     if (args.length > 0 && args[0].includes("-")) {
       const [min, max] = args[0].split("-").map(Number);
+
+      // Might be hard to read, but basically: checks if both min and max are numbers and min is less than or equal to max
       if (!isNaN(min) && !isNaN(max) && min <= max) {
         const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
         return message.reply(
@@ -46,7 +48,7 @@ Usage examples:
     const shuffledMembers = shuffle(members);
     const randomMember = shuffledMembers[0];
 
-    // Reply with the randomly chosen user's display name
+    // Reply with tagging the randomly chosen user
     message.reply(`The randomly chosen user is: <@${randomMember.id}>`);
   },
 };
