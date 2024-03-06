@@ -17,3 +17,8 @@ node_modules/
 
 # Ignore logs directory
 Logs/
+
+# Ignore Docker files
+.dockerignore
+Dockerfile
+docker-compose.yml
