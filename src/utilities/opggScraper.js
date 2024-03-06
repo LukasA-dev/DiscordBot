@@ -1,6 +1,6 @@
 // Scraping constants
 const axios = require("axios");
-const cheerio = require("cheerio"); 
+const cheerio = require("cheerio");
 
 // Scraping opgg functions
 async function fetchRankFromOPGG(summonerName, region = "euw") {
@@ -8,7 +8,7 @@ async function fetchRankFromOPGG(summonerName, region = "euw") {
     const response = await axios.get(
       `https://${region}.op.gg/summoner/userName=${encodeURI(summonerName)}`
     );
-    
+
     const $ = cheerio.load(response.data);
     let rankInfo = {
       rank: "Unranked",

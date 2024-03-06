@@ -10,7 +10,7 @@ function initializeVoiceConnection(connection) {
       `Voice connection state changed: ${oldState.status} -> ${newState.status}`
     );
   });
-  
+
   // Handle errors
   connection.on("error", (error) => {
     console.error(`Voice connection error: ${error}`);

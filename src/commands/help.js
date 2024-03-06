@@ -1,7 +1,6 @@
 module.exports = {
   name: "help",
   description: "Provides help on commands.",
-  // Detailed instructions for obtaining help on specific commands or listing all commands
   detailedDescription:
     "Use `k!help [command]` to get detailed information on a specific command. If no command is specified, a list of all available commands will be displayed.",
   execute(message, args, client) {
