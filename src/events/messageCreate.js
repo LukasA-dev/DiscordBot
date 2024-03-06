@@ -1,7 +1,7 @@
 const { PREFIX } = process.env; // Use the PREFIX from your .env file
 
 module.exports = (client, commands) => {
-  client.on('messageCreate', async message => {
+  client.on("messageCreate", async (message) => {
     // Ignore messages from bots or messages that do not start with the prefix
     if (message.author.bot || !message.content.startsWith(PREFIX)) return;
 
@@ -20,7 +20,7 @@ module.exports = (client, commands) => {
       await command.execute(message, args, client);
     } catch (error) {
       console.error(`Error executing command '${commandName}':`, error);
-      message.reply('there was an error trying to execute that command!');
+      message.reply("there was an error trying to execute that command!");
     }
   });
 };

@@ -1,4 +1,10 @@
-module.exports = (client, voiceConnections, voiceActivityCollection, voiceActivityIntervals, msToTime) => {
+module.exports = (
+  client,
+  voiceConnections,
+  voiceActivityCollection,
+  voiceActivityIntervals,
+  msToTime
+) => {
   // Listen for voice state updates
   client.on("voiceStateUpdate", async (oldState, newState) => {
     // Extract relevant information from the state
@@ -20,7 +26,10 @@ module.exports = (client, voiceConnections, voiceActivityCollection, voiceActivi
           { upsert: true }
         );
       } catch (error) {
-        console.error("Error updating join time in voiceActivityCollection:", error);
+        console.error(
+          "Error updating join time in voiceActivityCollection:",
+          error
+        );
       }
 
       // Set an interval to update the time spent in voice chat
@@ -36,7 +45,10 @@ module.exports = (client, voiceConnections, voiceActivityCollection, voiceActivi
             { upsert: true }
           );
         } catch (error) {
-          console.error("Error updating time spent in voiceActivityCollection:", error);
+          console.error(
+            "Error updating time spent in voiceActivityCollection:",
+            error
+          );
         }
       }, 2000);
     } else if (oldState.channelId && !newState.channelId) {
@@ -55,7 +67,10 @@ module.exports = (client, voiceConnections, voiceActivityCollection, voiceActivi
           { $inc: { totalTimeSpent: timeSpent } }
         );
       } catch (error) {
-        console.error("Error updating total time spent in voiceActivityCollection:", error);
+        console.error(
+          "Error updating total time spent in voiceActivityCollection:",
+          error
+        );
       }
     }
   });
