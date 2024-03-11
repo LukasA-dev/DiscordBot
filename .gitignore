@@ -22,3 +22,6 @@ Logs/
 .dockerignore
 Dockerfile
 docker-compose.yml
+
+# Ignore Todo files
+TODO.TODO
