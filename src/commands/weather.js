@@ -1,5 +1,6 @@
 // Import necessary modules
-const axios = require("axios");
+const axios = require("axios"); // HTTP client for making requests to the OpenWeather API
+const { EmbedBuilder } = require("discord.js"); // Embed message for displaying weather information
 const { roundToTenth } = require("../utilities/roundToTenth"); // Utility function for rounding temperatures
 
 // Emoji representations for various weather conditions
@@ -38,13 +39,31 @@ module.exports = {
       const { data } = response;
       const weatherCondition = data.weather[0].main; // Primary weather condition
       const emoji = weatherEmojis[weatherCondition] || ""; // Corresponding emoji or empty string if not found
+
       // Round temperature and "feels like" temperature to the nearest tenth
       const roundedTemp = roundToTenth(data.main.temp);
       const roundedFeelsLike = roundToTenth(data.main.feels_like);
 
-      // Construct and send the weather information message
-      const weatherInfo = `The current weather in ${data.name} is ${data.weather[0].description} ${emoji} with a temperature of ${roundedTemp}°C :thermometer: and feels like ${roundedFeelsLike}°C :thermometer:.`;
-      message.reply(weatherInfo);
+      const weatherEmbed = new EmbedBuilder()
+        .setColor("#0099ff")
+        .setTitle(`Weather in ${data.name}`)
+        .setDescription(`${data.weather[0].description} ${emoji}`)
+        .addFields(
+          {
+            name: "Temperature",
+            value: `${roundedTemp}°C :thermometer:`,
+            inline: true,
+          },
+          {
+            name: "Feels Like",
+            value: `${roundedFeelsLike}°C :thermometer:`,
+            inline: true,
+          }
+        )
+        .setFooter({ text: "Weather data provided by OpenWeather" })
+        .setTimestamp();
+
+      message.channel.send({ embeds: [weatherEmbed] });
     } catch (error) {
       console.error("Weather command error:", error);
       message.reply(
