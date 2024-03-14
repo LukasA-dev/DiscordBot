@@ -29,15 +29,15 @@ module.exports = {
         return;
       }
 
-      // Assuming you want to send the first definition found
+      // Send the first definition found
       const definition = definitions[0].definition.replace(/[\[\]]/g, ""); // Removing square brackets from the definition
 
       const defineEmbed = new EmbedBuilder()
-        .setColor("#0099ff") // Set the color of the embed
-        .setTitle(`Definition of ${term}`) // Set the title of the embed
-        .setDescription(definition) // Set the definition as description
-        .setFooter({ text: "Definition from Urban Dictionary" }) // Add a footer
-        .setTimestamp(); // Add the current timestamp
+        .setColor("#0099ff")
+        .setTitle(`Definition of ${term}`)
+        .setDescription(definition)
+        .setFooter({ text: "Definition from Urban Dictionary" })
+        .setTimestamp();
 
       message.channel.send({ embeds: [defineEmbed] });
     } catch (error) {
