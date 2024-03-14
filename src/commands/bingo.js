@@ -8,6 +8,8 @@ module.exports = {
   name: "bingo",
   description:
     "Lists all champions with started token progress for EUW region.",
+  detailedDescription:
+    "Lists all champions with started token progress for EUW region. \n Usage: k!bingo [riotID]",
   async execute(message, args) {
     // Ensure the command is called with an argument
     if (args.length < 1) {
@@ -44,8 +46,8 @@ module.exports = {
           embed.addFields([
             {
               name: "\u200b", // Invisible character for an empty field title
-              value: `${emojiString} ${champions.join(", ")}`, // Champion names displayed with emojis
-              inline: false,
+              value: `${emojiString} ${champions.join(", ")}`, // Champion names displayed besides token emojis
+              inline: false, // Display fields vertically for readability
             },
           ]);
         }
