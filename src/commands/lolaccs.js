@@ -1,24 +1,40 @@
 module.exports = {
   name: "lolaccs",
   description: "Manage your League of Legends accounts.",
-  // Detailed instructions for managing LoL accounts using various subcommands
   detailedDescription:
-    "Use `k!lolaccs add [account1],[account2]` to add accounts, `k!lolaccs remove [account1],[account2]` to remove accounts, `k!lolaccs clear` to remove all accounts, and `k!lolaccs` to list your accounts.",
+    "Use `k!lolaccs add [account1],[account2]` to add accounts, `k!lolaccs remove [account1],[account2]` to remove accounts, `k!lolaccs clear` to remove all accounts, `k!lolaccs @username` to view accounts of a mentioned user, and `k!lolaccs` to list your accounts.",
   async execute(message, args, client) {
+    // Check if the first argument is a user mention
+    const mention = args[0];
+    let targetUser;
+    if (mention && mention.startsWith("<@") && mention.endsWith(">")) {
+      const mentionId = mention.replace(/\D/g, ""); // Extract numeric ID from mention
+      targetUser = await client.users.fetch(mentionId).catch(() => null); // Fetch user by ID, handle invalid ID
+      if (!targetUser) return message.reply("Invalid user mention.");
+      args.shift(); // Remove the mention from args if valid
+    } else {
+      targetUser = message.author; // Default to the command issuer
+    }
+
+    const username = targetUser.id; // Use targetUser's Discord ID for account association
+    const adminId = process.env.ADMIN_USERID; // Fetch the admin ID from the environment variables
+
     // Extract the subcommand (add, remove, clear) and parse account names
     const subCommand = args.shift();
     const accounts = args
       .join(" ")
       .split(",")
       .map((acc) => acc.trim());
-    const username = message.author.id; // User's Discord ID for account association
 
-    // Permission check: Ensure the command issuer matches the intended account modifier
+    // Permission check for modifying commands (add, remove, clear)
     if (
       ["add", "remove", "clear"].includes(subCommand) &&
-      username !== message.author.id
+      username !== message.author.id &&
+      message.author.id !== adminId
     ) {
-      return message.reply("You do not have permissions for that.");
+      return message.reply(
+        "You do not have permissions to modify other users' accounts."
+      );
     }
 
     // Execute the subcommand logic: add, remove, clear, or list accounts
@@ -46,26 +62,26 @@ module.exports = {
         );
         break;
       default:
-        // List all accounts associated with the user
+        // List all accounts associated with the target user
         const userAccs = await client.dbCollections.lolAccsCollection.findOne({
           username,
         });
         if (userAccs && userAccs.accounts.length > 0) {
           message.reply(
-            `<@${username}> Accounts are ${userAccs.accounts.join(", ")}`
+            `<@${username}>'s Accounts: ${userAccs.accounts.join(", ")}`
           );
         } else {
-          message.reply(`<@${username}> have not added any accounts yet.`);
+          message.reply(`<@${username}> has not added any accounts yet.`);
         }
         return;
     }
 
-    // Confirm account list update to the user
+    // Confirm account list update to the user or admin
     const updatedAccs = await client.dbCollections.lolAccsCollection.findOne({
       username,
     });
     message.reply(
-      `Your account has been updated, your new list: ${updatedAccs.accounts.join(
+      `Account list updated for <@${username}>, new list: ${updatedAccs.accounts.join(
         ", "
       )}`
     );
