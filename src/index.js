@@ -68,6 +68,7 @@ client.once("ready", async () => {
     client.dbCollections.voiceActivityCollection =
       db.collection("voiceActivity");
     client.dbCollections.lolAccsCollection = db.collection("lolAccs");
+    client.dbCollections.clashCollection = db.collection("clash");
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
     process.exit(1);
