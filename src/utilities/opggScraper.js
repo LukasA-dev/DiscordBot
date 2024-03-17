@@ -3,10 +3,14 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 
 // Scraping opgg functions
-async function fetchRankFromOPGG(summonerName, region = "euw") {
+async function fetchRankFromOPGG(riotId, region = "euw") {
   try {
+    // Replace '#' with '-' to match the op.gg URL format for Riot IDs
+    const formattedRiotId = riotId.replace("#", "-");
     const response = await axios.get(
-      `https://${region}.op.gg/summoner/userName=${encodeURI(summonerName)}`
+      `https://${region}.op.gg/summoners/${region}/${encodeURI(
+        formattedRiotId
+      )}`
     );
 
     const $ = cheerio.load(response.data);
@@ -20,7 +24,7 @@ async function fetchRankFromOPGG(summonerName, region = "euw") {
     $("div.header").each((i, elem) => {
       // Check if the header text is "Ranked Solo"
       if ($(elem).text().trim() === "Ranked Solo") {
-        // Navigate to the parent and then find the div with class tier, lp and ratio.
+        // Navigate to the parent and then find the div with class tier, lp, and ratio.
         const parentDiv = $(elem).parent();
         rankInfo.rank = parentDiv.find("div.tier").first().text().trim();
         rankInfo.lp = parentDiv.find("div.lp").first().text().trim();
@@ -34,7 +38,7 @@ async function fetchRankFromOPGG(summonerName, region = "euw") {
       }
     });
 
-    return `${summonerName} is ${rankInfo.rank}, ${rankInfo.lp} with a ${rankInfo.winRate} winrate`;
+    return `${riotId} is ${rankInfo.rank}, ${rankInfo.lp} with a ${rankInfo.winRate} winrate`;
   } catch (error) {
     console.error("Error fetching rank from OPGG:", error);
     return null;
