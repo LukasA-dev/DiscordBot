@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       // App
-      name: "Kebab BOT",
+      name: "Test BOT",
       script: "index.js",
 
       // Logs
