@@ -124,5 +124,18 @@ client.on("messageCreate", async (message) => {
   }
 });
 
+// Express web server
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+  res.send("Bot is alive!");
+});
+
+app.listen(port, () => {
+  console.log(`Express web server started: http://localhost:${port}`);
+});
+
 // Login to Discord
 client.login(process.env.DISCORD_TOKEN);
