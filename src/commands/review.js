@@ -8,11 +8,11 @@ module.exports = {
   description: "Submit or fetch reviews for a movie.",
   detailedDescription:
     "To review a movie or fetch existing reviews, use the following formats: \n\n" +
-    'Add a review: `k!review add "Movie Title" Rating Comment`\n' +
+    'Add a review: `k!review add "Movie Title" [Rating /10] [Comment]`\n' +
     'Fetch reviews: `k!review get "Movie Title"`\n\n' +
-    '**Note**: Always enclose the movie title in quotation marks (`""`). Ratings should be between 0 and 10.\n\n' +
+    '**Note**: Always enclose the movie title in quotation marks (`" "`). Ratings should be between 0 and 10.\n\n' +
     "Examples:\n" +
-    '`k!review add "Inception" 8.5 "Great movie!"`\n' +
+    '`k!review add "Inception" 8.5 Great movie!`\n' +
     "Adds your review for 'Inception' with a rating of 8.5.\n\n" +
     '`k!review get "Inception"`\n' +
     "Fetches and displays all reviews for 'Inception', including the average rating.",
